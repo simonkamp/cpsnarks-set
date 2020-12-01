@@ -8,19 +8,29 @@ edition = "2018"
 accumulator = { git = "https://github.com/kobigurk/cpsnarks-set-accumulator" }
 quick-error = "1.2.3"
 rug = "1.7.0"
-algebra-core = { git = "https://github.com/scipr-lab/zexe" }
-algebra = { git = "https://github.com/scipr-lab/zexe", features = ["bls12_381"]}
+#algebra-core = { git = "https://github.com/scipr-lab/zexe" }
+#algebra = { git = "https://github.com/scipr-lab/zexe", features = ["bls12_381"]}
 merlin = "2.0.0"
 rand = { version = "0.7" }
-r1cs-core = { git = "https://github.com/scipr-lab/zexe" }
-r1cs-std = { git = "https://github.com/scipr-lab/zexe" }
-crypto-primitives = { git = "https://github.com/scipr-lab/zexe", features = ["r1cs"]}
-legogro16 = { git = "https://github.com/kobigurk/legogro16" }
+#r1cs-core = { git = "https://github.com/scipr-lab/zexe" }
+#r1cs-std = { git = "https://github.com/scipr-lab/zexe" }
+#crypto-primitives = { git = "https://github.com/scipr-lab/zexe", features = ["r1cs"]}
+#legogro16 = { git = "https://github.com/kobigurk/legogro16" }
 curve25519-dalek = { version = "2", optional = true, features = ["serde", "simd_backend"] }
 bulletproofs = { git = "https://github.com/dalek-cryptography/bulletproofs", branch = "develop", optional = true, features = ["yoloproofs"] }
 digest = "0.8.1"
 blake2 = ">= 0.8.1"
 cfg-if = "0.1"
+
+ark-serialize = { git = "https://github.com/arkworks-rs/algebra", default-features = false, features = [ "derive" ] }
+ark-ec = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
+ark-ff = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
+ark-std = { git = "https://github.com/arkworks-rs/utils", default-features = false }
+ark-poly = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
+ark-relations = { git = "https://github.com/arkworks-rs/snark", default-features = false }
+ark-poly-commit = { git = "https://github.com/arkworks-rs/poly-commit", default-features = false }
+bench-utils = { git = "https://github.com/arkworks-rs/utils", default-features = false }
+ark-r1cs-std = { git = "https://github.com/arkworks-rs/r1cs-std", default-features = false }
 
 [features]
 dalek = ["curve25519-dalek", "bulletproofs"]

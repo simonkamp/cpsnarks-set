@@ -12,9 +12,9 @@ use crate::{
     },
     utils::integer_to_bigint_mod_q,
 };
-use algebra_core::{AffineCurve, PairingEngine, PrimeField, ProjectiveCurve, UniformRand};
-use r1cs_core::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
-use r1cs_std::{
+use ark_ec::{AffineCurve, PairingEngine, PrimeField, ProjectiveCurve, UniformRand};
+use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
+use ark_r1cs_std::{
     alloc::AllocGadget, bits::ToBitsGadget, boolean::Boolean, eq::EqGadget, fields::fp::FpGadget,
     Assignment,
 };
@@ -159,7 +159,7 @@ mod test {
     use accumulator::group::Rsa2048;
     use algebra::bls12_381::{Bls12_381, Fr, G1Projective};
     use merlin::Transcript;
-    use r1cs_core::ConstraintSynthesizer;
+    use ark_relations::r1cs::ConstraintSynthesizer;
     use r1cs_std::test_constraint_system::TestConstraintSystem;
     use rand::thread_rng;
     use rug::rand::RandState;

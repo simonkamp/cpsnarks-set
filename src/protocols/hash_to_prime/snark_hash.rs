@@ -15,13 +15,13 @@ use crate::{
         bytes_big_endian_to_bits_big_endian, integer_to_bigint_mod_q, log2,
     },
 };
-use algebra_core::{
+use ark_ec::{
     AffineCurve, BigInteger, One, PairingEngine, PrimeField, ProjectiveCurve, UniformRand,
 };
 use blake2::Blake2s;
 use crypto_primitives::prf::blake2s::constraints::blake2s_gadget;
 use digest::{Digest, FixedOutput};
-use r1cs_core::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
+use ark_relations::r1cs::{ConstraintSynthesizer, ConstraintSystem, SynthesisError};
 use r1cs_std::{
     alloc::AllocGadget, bits::ToBitsGadget, boolean::Boolean, eq::EqGadget, fields::fp::FpGadget,
     Assignment,
@@ -322,7 +322,7 @@ mod test {
     use accumulator::group::Rsa2048;
     use algebra::bls12_381::{Bls12_381, Fr, G1Projective};
     use merlin::Transcript;
-    use r1cs_core::ConstraintSynthesizer;
+    use ark_relations::r1cs::ConstraintSynthesizer;
     use r1cs_std::test_constraint_system::TestConstraintSystem;
     use rand::thread_rng;
     use rug::rand::RandState;

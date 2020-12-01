@@ -43,10 +43,16 @@ where
 mod zexe {
     use super::{CurvePointProjective, Field};
     use crate::utils::{bits_big_endian_to_bytes_big_endian, bytes_to_integer, curve::CurveError};
-    use algebra_core::{
-        BigInteger, CanonicalSerialize, FpParameters, PrimeField, ProjectiveCurve,
-        SerializationError,
+    use ark_ec::{
+         CanonicalSerialize,  PrimeField, ProjectiveCurve,
     };
+    use ark_ff::{
+        BigInteger,  FpParameters,
+    };
+    use ark_serialize::{
+       SerializationError,
+   };
+
     use rand::{CryptoRng, RngCore};
     use rug::Integer;
 

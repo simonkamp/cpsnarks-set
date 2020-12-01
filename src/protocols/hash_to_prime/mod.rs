@@ -17,7 +17,7 @@ cfg_if::cfg_if! {
         pub mod snark_hash;
         pub mod snark_range;
 
-        use algebra_core::{PairingEngine, ConstantSerializedSize, CanonicalSerialize};
+        use ark_ec::{PairingEngine, ConstantSerializedSize, CanonicalSerialize};
 
         impl<E: PairingEngine> CRSSize for legogro16::Parameters::<E> {
             fn crs_size(&self) -> (usize, usize) {

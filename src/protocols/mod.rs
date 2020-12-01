@@ -4,7 +4,7 @@ use crate::{
     channels::ChannelError, commitments::CommitmentError,
     protocols::hash_to_prime::HashToPrimeError,
 };
-use r1cs_core::SynthesisError;
+use ark_relations::r1cs::{SynthesisError};
 use rug::Integer;
 
 pub mod coprime;
