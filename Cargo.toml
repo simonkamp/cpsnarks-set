@@ -19,7 +19,7 @@ rand = { version = "0.7" }
 #crypto-primitives = { git = "https://github.com/scipr-lab/zexe", features = ["r1cs"]}
 #legogro16 = { git = "https://github.com/kobigurk/legogro16" }
 curve25519-dalek = { version = "2", optional = true, features = ["serde", "simd_backend"] }
-bulletproofs = { git = "https://github.com/dalek-cryptography/bulletproofs", branch = "develop", optional = true, features = ["yoloproofs"] }
+bulletproofs = { git = "https://github.com/matteocam/bulletproofs", branch = "develop", optional = true, features = ["yoloproofs"] }
 digest = "0.8.1"
 blake2 = ">= 0.8.1"
 cfg-if = "0.1"
