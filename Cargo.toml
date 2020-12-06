@@ -4,6 +4,8 @@ version = "0.1.0"
 authors = ["Kobi Gurkan <kobigurk@gmail.com>"]
 edition = "2018"
 
+exclude = [ "src/protocols/hash_to_prime/*"]
+
 [dependencies]
 accumulator = { git = "https://github.com/kobigurk/cpsnarks-set-accumulator" }
 quick-error = "1.2.3"
@@ -21,22 +23,28 @@ bulletproofs = { git = "https://github.com/dalek-cryptography/bulletproofs", bra
 digest = "0.8.1"
 blake2 = ">= 0.8.1"
 cfg-if = "0.1"
+num-bigint = {version = "0.3", default-features = false }
+tracing = { version = "0.1", default-features = false, features = [ "attributes" ] }
+num-traits = {version = " >= 0.2.14", default-features = false }
+
+
+
+#ark-r1cs-std = { git = "https://github.com/arkworks-rs/r1cs-std",  default-features = false }
 
 ark-serialize = { git = "https://github.com/arkworks-rs/algebra", default-features = false, features = [ "derive" ] }
 ark-ec = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
 ark-ff = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
-ark-std = { git = "https://github.com/arkworks-rs/utils", default-features = false }
+ark-std = { git = "https://github.com/arkworks-rs/utils",default-features = false}
 ark-poly = { git = "https://github.com/arkworks-rs/algebra", default-features = false }
 ark-relations = { git = "https://github.com/arkworks-rs/snark", default-features = false }
 ark-poly-commit = { git = "https://github.com/arkworks-rs/poly-commit", default-features = false }
 bench-utils = { git = "https://github.com/arkworks-rs/utils", default-features = false }
-ark-r1cs-std = { git = "https://github.com/arkworks-rs/r1cs-std", default-features = false }
 
 [features]
 dalek = ["curve25519-dalek", "bulletproofs"]
-zexe = []
 class = []
 default = ["zexe"]
+zexe = []
 
 [dev-dependencies]
 criterion = "0.3"

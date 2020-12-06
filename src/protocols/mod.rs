@@ -2,16 +2,16 @@
 
 use crate::{
     channels::ChannelError, commitments::CommitmentError,
-    protocols::hash_to_prime::HashToPrimeError,
+   // protocols::hash_to_prime::HashToPrimeError,
 };
 use ark_relations::r1cs::{SynthesisError};
 use rug::Integer;
 
 pub mod coprime;
-pub mod hash_to_prime;
-pub mod membership;
+//pub mod hash_to_prime;
+//pub mod membership;
 pub mod modeq;
-pub mod nonmembership;
+//pub mod nonmembership;
 pub mod root;
 
 quick_error! {
@@ -58,9 +58,9 @@ quick_error! {
         VerifierChannelError(err: ChannelError) {
             from()
         }
-        PrimeError(err: HashToPrimeError) {
+        /* PrimeError(err: HashToPrimeError) {
             from()
-        }
+        } */
         BPError(err: R1CSError) {
             from()
         }

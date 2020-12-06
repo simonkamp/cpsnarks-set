@@ -78,21 +78,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ark-r1cs-std"
-version = "0.1.0"
-source = "git+https://github.com/arkworks-rs/r1cs-std#905e7284b2511f59cb5ea1890cd5e0c3d200db41"
-dependencies = [
- "ark-ec",
- "ark-ff",
- "ark-relations",
- "ark-std",
- "derivative",
- "num-bigint",
- "num-traits",
- "tracing",
-]
-
-[[package]]
 name = "ark-relations"
 version = "0.1.0"
 source = "git+https://github.com/arkworks-rs/snark#0648c547e4f9fda46a40ad0a4896652b87c2316b"
@@ -338,7 +323,6 @@ dependencies = [
  "ark-ff",
  "ark-poly",
  "ark-poly-commit",
- "ark-r1cs-std",
  "ark-relations",
  "ark-serialize",
  "ark-std",
@@ -350,9 +334,12 @@ dependencies = [
  "curve25519-dalek 2.0.0",
  "digest",
  "merlin",
+ "num-bigint",
+ "num-traits",
  "quick-error",
  "rand",
  "rug",
+ "tracing",
 ]
 
 [[package]]
@@ -675,9 +662,9 @@ dependencies = [
 
 [[package]]
 name = "num-traits"
-version = "0.2.11"
+version = "0.2.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c62be47e61d1842b9170f0fdeec8eba98e60e90e5446449a0545e5152acd7096"
+checksum = "9a64b1ec5cda2586e284722486d802acf1f7dbdc623e2bfc57e65ca1cd099290"
 dependencies = [
  "autocfg",
 ]

@@ -5,7 +5,7 @@
 //! consume each message in the protocol and how to generate challenge scalars.
 use crate::{
     protocols::{
-        hash_to_prime::transcript::TranscriptProtocolHashToPrime,
+        //hash_to_prime::transcript::TranscriptProtocolHashToPrime,
         modeq::transcript::TranscriptProtocolModEq, root::transcript::TranscriptProtocolRoot,
     },
     utils::{
@@ -29,7 +29,7 @@ pub trait TranscriptProtocolMembershipPrime<
     G: ConvertibleUnknownOrderGroup,
     P: CurvePointProjective,
 >:
-    TranscriptProtocolRoot<G> + TranscriptProtocolModEq<G, P> + TranscriptProtocolHashToPrime<P>
+    TranscriptProtocolRoot<G> + TranscriptProtocolModEq<G, P> //+ TranscriptProtocolHashToPrime<P>
 {
 }
 

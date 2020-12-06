@@ -44,13 +44,13 @@ mod zexe {
     use super::{CurvePointProjective, Field};
     use crate::utils::{bits_big_endian_to_bytes_big_endian, bytes_to_integer, curve::CurveError};
     use ark_ec::{
-         CanonicalSerialize,  PrimeField, ProjectiveCurve,
+            ProjectiveCurve,
     };
     use ark_ff::{
-        BigInteger,  FpParameters,
+        BigInteger, PrimeField, FpParameters,
     };
     use ark_serialize::{
-       SerializationError,
+       CanonicalSerialize, SerializationError,
    };
 
     use rand::{CryptoRng, RngCore};
