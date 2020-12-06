@@ -7,6 +7,8 @@ edition = "2018"
 exclude = [ "src/protocols/hash_to_prime/*"]
 
 [dependencies]
+gmp-mpfr-sys = "1.2.2"
+
 accumulator = { git = "https://github.com/kobigurk/cpsnarks-set-accumulator" }
 quick-error = "1.2.3"
 rug = "1.7.0"
