@@ -97,8 +97,9 @@ mod zexe {
             F::rand(rng)
         }
     }
-
-    impl<P: ProjectiveCurve> CurvePointProjective for P {
+    
+    impl<P: ProjectiveCurve> CurvePointProjective for P 
+    where <P as ProjectiveCurve>::ScalarField: AsRef<[u64]> {
         type ScalarField = P::ScalarField;
 
         fn mul(&self, s: &Self::ScalarField) -> Self {
