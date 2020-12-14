@@ -9,17 +9,11 @@ exclude = [ "src/protocols/hash_to_prime/*"]
 [dependencies]
 gmp-mpfr-sys = "1.2.2"
 
-accumulator = { git = "https://github.com/kobigurk/cpsnarks-set-accumulator" }
+accumulator = { git = "https://github.com/matteocam/cpsnarks-set-accumulator" }
 quick-error = "1.2.3"
-rug = "<=1.7.0"
-#algebra-core = { git = "https://github.com/scipr-lab/zexe" }
-#algebra = { git = "https://github.com/scipr-lab/zexe", features = ["bls12_381"]}
+#rug = "<=1.7.0"
 merlin = "2.0.0"
 rand = { version = "0.7" }
-#r1cs-core = { git = "https://github.com/scipr-lab/zexe" }
-#r1cs-std = { git = "https://github.com/scipr-lab/zexe" }
-#crypto-primitives = { git = "https://github.com/scipr-lab/zexe", features = ["r1cs"]}
-#legogro16 = { git = "https://github.com/kobigurk/legogro16" }
 curve25519-dalek = { version = "2", optional = true, features = ["serde", "simd_backend"] }
 bulletproofs = { git = "https://github.com/matteocam/bulletproofs", branch = "develop", optional = true, features = ["yoloproofs"] }
 digest = "0.8.1"
