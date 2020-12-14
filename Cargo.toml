@@ -11,7 +11,7 @@ gmp-mpfr-sys = "1.2.2"
 
 accumulator = { git = "https://github.com/matteocam/cpsnarks-set-accumulator" }
 quick-error = "1.2.3"
-#rug = "<=1.7.0"
+rug = "=1.7.0"
 merlin = "2.0.0"
 rand = { version = "0.7" }
 curve25519-dalek = { version = "2", optional = true, features = ["serde", "simd_backend"] }
