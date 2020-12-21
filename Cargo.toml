@@ -14,7 +14,9 @@ quick-error = "1.2.3"
 rug = "=1.7.0"
 merlin = "2.0.0"
 rand = { version = "0.7" }
-curve25519-dalek = { version = "2", optional = true, features = ["serde", "simd_backend"] }
+curve25519-dalek = { version = "3", optional = true, features = ["serde"] }
+#curve25519-dalek = "3.0.0"
+
 bulletproofs = { git = "https://github.com/matteocam/bulletproofs", branch = "develop", optional = true, features = ["yoloproofs"] }
 digest = "0.8.1"
 blake2 = ">= 0.8.1"

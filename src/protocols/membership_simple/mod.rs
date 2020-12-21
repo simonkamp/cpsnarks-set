@@ -484,12 +484,12 @@ mod test {
         let mut rng2 = thread_rng();
 
         let mut crs =
-            crate::protocols::membership::Protocol::<Rsa2048, RistrettoPointProtocol>::setup(
+            crate::protocols::membership::Protocol::<Rsa2048, RistrettoPoint>::setup(
                 &params, &mut rng1, &mut rng2,
             )
             .unwrap()
             .crs;
-        let protocol = Protocol::<Rsa2048, RistrettoPointProtocol>::from_crs(&crs);
+        let protocol = Protocol::<Rsa2048, RistrettoPoint>::from_crs(&crs);
 
         let value = Integer::from(Integer::u_pow_u(
             2,
