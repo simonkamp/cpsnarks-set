@@ -9,7 +9,7 @@ use rug::Integer;
 
 pub mod coprime;
 //pub mod hash_to_prime;
-//pub mod membership;
+pub mod membership_simple;
 pub mod modeq;
 //pub mod nonmembership;
 pub mod root;

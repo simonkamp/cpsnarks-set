@@ -3,11 +3,6 @@ use crate::{
     commitments::{integer::IntegerCommitment, pedersen::PedersenCommitment, Commitment},
     parameters::Parameters,
     protocols::{
-        hash_to_prime::{
-            channel::{HashToPrimeProverChannel, HashToPrimeVerifierChannel},
-            CRSHashToPrime, HashToPrimeError, HashToPrimeProtocol,
-            Statement as HashToPrimeStatement, Witness as HashToPrimeWitness,
-        },
         modeq::{
             channel::{ModEqProverChannel, ModEqVerifierChannel},
             CRSModEq, Proof as ModEqProof, Protocol as ModEqProtocol, Statement as ModEqStatement,
@@ -31,24 +26,22 @@ use rug::Integer;
 pub mod channel;
 pub mod transcript;
 
-pub struct CRS<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimeProtocol<P>>
+pub struct CRS<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective>
 {
     // G contains the information about Z^*_N
     pub parameters: Parameters,
     pub crs_root: CRSRoot<G>,
     pub crs_modeq: CRSModEq<G, P>,
-    pub crs_hash_to_prime: CRSHashToPrime<P, HP>,
 }
 
-impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimeProtocol<P>> Clone
-    for CRS<G, P, HP>
+impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> Clone
+    for CRS<G, P>
 {
     fn clone(&self) -> Self {
         Self {
             parameters: self.parameters.clone(),
             crs_root: self.crs_root.clone(),
             crs_modeq: self.crs_modeq.clone(),
-            crs_hash_to_prime: self.crs_hash_to_prime.clone(),
         }
     }
 }
@@ -56,9 +49,9 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
 pub struct Protocol<
     G: ConvertibleUnknownOrderGroup,
     P: CurvePointProjective,
-    HP: HashToPrimeProtocol<P>,
+
 > {
-    pub crs: CRS<G, P, HP>,
+    pub crs: CRS<G, P>,
 }
 
 pub struct Statement<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> {
@@ -75,41 +68,38 @@ pub struct Witness<G: ConvertibleUnknownOrderGroup> {
 pub struct Proof<
     G: ConvertibleUnknownOrderGroup,
     P: CurvePointProjective,
-    HP: HashToPrimeProtocol<P>,
+
 > {
     pub c_e: <IntegerCommitment<G> as Commitment>::Instance,
     pub proof_root: RootProof<G>,
     pub proof_modeq: ModEqProof<G, P>,
-    pub proof_hash_to_prime: HP::Proof,
 }
 
-impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimeProtocol<P>> Clone
-    for Proof<G, P, HP>
+impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> Clone
+    for Proof<G, P>
 {
     fn clone(&self) -> Self {
         Self {
             c_e: self.c_e.clone(),
             proof_root: self.proof_root.clone(),
             proof_modeq: self.proof_modeq.clone(),
-            proof_hash_to_prime: self.proof_hash_to_prime.clone(),
         }
     }
 }
 
-impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimeProtocol<P>>
-    Protocol<G, P, HP>
+impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective>
+    Protocol<G, P>
 {
     pub fn setup<R1: MutRandState, R2: RngCore + CryptoRng>(
         parameters: &Parameters,
         rng1: &mut R1,
         rng2: &mut R2,
-    ) -> Result<Protocol<G, P, HP>, SetupError> {
+    ) -> Result<Protocol<G, P>, SetupError> {
         let integer_commitment_parameters = IntegerCommitment::<G>::setup(rng1);
         let pedersen_commitment_parameters = PedersenCommitment::<P>::setup(rng2);
-        let hash_to_prime_parameters =
-            HP::setup(rng2, &pedersen_commitment_parameters, parameters)?;
+
         Ok(Protocol {
-            crs: CRS::<G, P, HP> {
+            crs: CRS::<G, P> {
                 parameters: parameters.clone(),
                 crs_modeq: CRSModEq::<G, P> {
                     parameters: parameters.clone(),
@@ -119,11 +109,6 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
                 crs_root: CRSRoot::<G> {
                     parameters: parameters.clone(),
                     integer_commitment_parameters,
-                },
-                crs_hash_to_prime: CRSHashToPrime::<P, HP> {
-                    parameters: parameters.clone(),
-                    pedersen_commitment_parameters,
-                    hash_to_prime_parameters,
                 },
             },
         })
@@ -135,7 +120,6 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
         C: MembershipVerifierChannel<G>
             + RootVerifierChannel<G>
             + ModEqVerifierChannel<G, P>
-            + HashToPrimeVerifierChannel<P, HP>,
     >(
         &self,
         verifier_channel: &mut C,
@@ -144,13 +128,12 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
         statement: &Statement<G, P>,
         witness: &Witness<G>,
     ) -> Result<(), ProofError> {
-        let (hashed_e, _) = self.hash_to_prime(&witness.e)?;
         let r = random_between(rng1, &Integer::from(0), &G::order_upper_bound());
         let c_e = self
             .crs
             .crs_root
             .integer_commitment_parameters
-            .commit(&hashed_e, &r)?;
+            .commit(&witness.e, &r)?;
         verifier_channel.send_c_e(&c_e)?;
         let root = RootProtocol::from_crs(&self.crs.crs_root);
         root.prove(
@@ -161,7 +144,7 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
                 acc: statement.c_p.clone(),
             },
             &RootWitness {
-                e: hashed_e.clone(),
+                e: witness.e.clone(),
                 r: r.clone(),
                 w: witness.w.clone(),
             },
@@ -176,20 +159,8 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
                 c_e_q: statement.c_e_q.clone(),
             },
             &ModEqWitness {
-                e: hashed_e,
-                r,
-                r_q: witness.r_q.clone(),
-            },
-        )?;
-        let hash_to_prime = HashToPrimeProtocol::from_crs(&self.crs.crs_hash_to_prime);
-        hash_to_prime.prove(
-            verifier_channel,
-            rng2,
-            &HashToPrimeStatement {
-                c_e_q: statement.c_e_q.clone(),
-            },
-            &HashToPrimeWitness {
                 e: witness.e.clone(),
+                r,
                 r_q: witness.r_q.clone(),
             },
         )?;
@@ -201,7 +172,6 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
         C: MembershipProverChannel<G>
             + RootProverChannel<G>
             + ModEqProverChannel<G, P>
-            + HashToPrimeProverChannel<P, HP>,
     >(
         &self,
         prover_channel: &mut C,
@@ -224,23 +194,14 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective, HP: HashToPrimePr
                 c_e_q: statement.c_e_q.clone(),
             },
         )?;
-        let hash_to_prime = HashToPrimeProtocol::from_crs(&self.crs.crs_hash_to_prime);
-        hash_to_prime.verify(
-            prover_channel,
-            &HashToPrimeStatement {
-                c_e_q: statement.c_e_q.clone(),
-            },
-        )?;
+
 
         Ok(())
     }
 
-    pub fn hash_to_prime(&self, e: &Integer) -> Result<(Integer, u64), HashToPrimeError> {
-        let hash_to_prime = HashToPrimeProtocol::from_crs(&self.crs.crs_hash_to_prime);
-        hash_to_prime.hash_to_prime(e)
-    }
 
-    pub fn from_crs(crs: &CRS<G, P, HP>) -> Protocol<G, P, HP> {
+
+    pub fn from_crs(crs: &CRS<G, P>) -> Protocol<G, P> {
         Protocol { crs: crs.clone() }
     }
 }
@@ -287,7 +248,7 @@ mod test {
         >::setup(&params, &mut rng1, &mut rng2)
         .unwrap()
         .crs;
-        let protocol = Protocol::<Rsa2048, G1Projective, HPProtocol<Bls12_381>>::from_crs(&crs);
+        let protocol = Protocol::<Rsa2048, G1ProjectiveProtocol<Bls12_381>>::from_crs(&crs);
 
         let value = Integer::from(Integer::u_pow_u(
             2,
@@ -356,7 +317,7 @@ mod test {
         >::setup(&params, &mut rng1, &mut rng2)
         .unwrap()
         .crs;
-        let protocol = Protocol::<ClassGroup, G1Projective, HPProtocol<Bls12_381>>::from_crs(&crs);
+        let protocol = Protocol::<ClassGroup, G1ProjectiveProtocol<Bls12_381>>::from_crs(&crs);
 
         let value = Integer::from(Integer::u_pow_u(
             2,
@@ -523,12 +484,12 @@ mod test {
         let mut rng2 = thread_rng();
 
         let mut crs =
-            crate::protocols::membership::Protocol::<Rsa2048, RistrettoPoint, HPProtocol>::setup(
+            crate::protocols::membership::Protocol::<Rsa2048, RistrettoPointProtocol>::setup(
                 &params, &mut rng1, &mut rng2,
             )
             .unwrap()
             .crs;
-        let protocol = Protocol::<Rsa2048, RistrettoPoint, HPProtocol>::from_crs(&crs);
+        let protocol = Protocol::<Rsa2048, RistrettoPointProtocol>::from_crs(&crs);
 
         let value = Integer::from(Integer::u_pow_u(
             2,
