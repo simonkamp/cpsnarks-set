@@ -41,7 +41,7 @@ bench-utils = { git = "https://github.com/arkworks-rs/utils", default-features =
 [features]
 dalek = ["curve25519-dalek", "bulletproofs"]
 class = []
-default = ["zexe"]
+default = ["dalek"]
 zexe = []
 
 [dev-dependencies]

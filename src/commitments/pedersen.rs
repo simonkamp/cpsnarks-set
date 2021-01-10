@@ -1,9 +1,12 @@
 //! Pedersen commitment over elliptic curves.
-
 use crate::commitments::{Commitment, CommitmentError};
 use crate::utils::{curve::CurvePointProjective, integer_to_bigint};
 use rand::{CryptoRng, RngCore};
 use rug::Integer;
+use curve25519_dalek::{ristretto::RistrettoPoint};
+use bulletproofs::{PedersenGens};
+
+
 
 #[derive(Clone)]
 pub struct PedersenCommitment<P: CurvePointProjective> {
@@ -26,6 +29,19 @@ impl<P: CurvePointProjective> PedersenCommitment<P> {
         }
     }
 }
+
+impl PedersenCommitment<RistrettoPoint> {
+    pub fn setup_default<R: RngCore + CryptoRng>(_rng: &mut R) -> PedersenCommitment<RistrettoPoint> {
+        let dflt = PedersenGens::default();
+
+        PedersenCommitment {
+            g: dflt.B,
+            h: dflt.B_blinding,
+        }
+    }
+
+}
+
 impl<P: CurvePointProjective> Commitment for PedersenCommitment<P> {
     type Instance = P;
 

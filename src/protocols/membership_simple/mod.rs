@@ -22,6 +22,8 @@ use channel::{MembershipProverChannel, MembershipVerifierChannel};
 use rand::{CryptoRng, RngCore};
 use rug::rand::MutRandState;
 use rug::Integer;
+use curve25519_dalek::{ristretto::RistrettoPoint};
+
 
 pub mod channel;
 pub mod transcript;
@@ -87,6 +89,34 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> Clone
     }
 }
 
+impl<G: ConvertibleUnknownOrderGroup>
+    Protocol<G, RistrettoPoint>
+{
+    pub fn setup_default<R1: MutRandState, R2: RngCore + CryptoRng>(
+        parameters: &Parameters,
+        rng1: &mut R1,
+        rng2: &mut R2,
+    ) -> Result<Protocol<G, RistrettoPoint>, SetupError> {
+        let integer_commitment_parameters = IntegerCommitment::<G>::setup(rng1);
+        let pedersen_commitment_parameters = PedersenCommitment::<RistrettoPoint>::setup(rng2);
+
+        Ok(Protocol {
+            crs: CRS::<G, RistrettoPoint> {
+                parameters: parameters.clone(),
+                crs_modeq: CRSModEq::<G, RistrettoPoint> {
+                    parameters: parameters.clone(),
+                    integer_commitment_parameters: integer_commitment_parameters.clone(),
+                    pedersen_commitment_parameters: pedersen_commitment_parameters.clone(),
+                },
+                crs_root: CRSRoot::<G> {
+                    parameters: parameters.clone(),
+                    integer_commitment_parameters,
+                },
+            },
+        })
+    } 
+}
+
 impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective>
     Protocol<G, P>
 {
@@ -112,7 +142,7 @@ impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective>
                 },
             },
         })
-    }
+    } 
 
     pub fn prove<
         R1: MutRandState,
@@ -489,7 +519,7 @@ mod test {
             )
             .unwrap()
             .crs;
-        let protocol = Protocol::<Rsa2048, RistrettoPoint>::from_crs(&crs);
+        let protocol = Protocol::<Rsa2048, RistrettoPointProtocol>::from_crs(&crs);
 
         let value = Integer::from(Integer::u_pow_u(
             2,
