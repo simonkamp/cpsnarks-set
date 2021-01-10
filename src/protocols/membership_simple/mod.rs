@@ -98,7 +98,7 @@ impl<G: ConvertibleUnknownOrderGroup>
         rng2: &mut R2,
     ) -> Result<Protocol<G, RistrettoPoint>, SetupError> {
         let integer_commitment_parameters = IntegerCommitment::<G>::setup(rng1);
-        let pedersen_commitment_parameters = PedersenCommitment::<RistrettoPoint>::setup(rng2);
+        let pedersen_commitment_parameters = PedersenCommitment::<RistrettoPoint>::setup_default(rng2);
 
         Ok(Protocol {
             crs: CRS::<G, RistrettoPoint> {
