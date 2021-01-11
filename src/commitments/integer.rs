@@ -6,14 +6,17 @@ use crate::{
 };
 use rug::rand::MutRandState;
 use rug::Integer;
+use serde::{Serialize};
 
-#[derive(Clone)]
-pub struct IntegerCommitment<G: ConvertibleUnknownOrderGroup> {
+#[derive(Clone, Serialize)]
+pub struct IntegerCommitment<G: ConvertibleUnknownOrderGroup> 
+{
     pub g: G::Elem,
     pub h: G::Elem,
 }
 
-impl<G: ConvertibleUnknownOrderGroup> IntegerCommitment<G> {
+impl<G: ConvertibleUnknownOrderGroup> IntegerCommitment<G> 
+{
     pub fn setup<R: MutRandState>(rng: &mut R) -> IntegerCommitment<G> {
         let upper_bound = G::order_upper_bound();
         let g = G::unknown_order_elem();

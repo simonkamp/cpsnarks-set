@@ -8,6 +8,8 @@ use crate::{
 use channel::{RootProverChannel, RootVerifierChannel};
 use rug::rand::MutRandState;
 use rug::Integer;
+use serde::{Serialize};
+
 
 pub mod channel;
 pub mod transcript;
@@ -29,13 +31,13 @@ pub struct Witness<G: ConvertibleUnknownOrderGroup> {
     pub w: G::Elem,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Message1<G: ConvertibleUnknownOrderGroup> {
     pub c_w: G::Elem,
     pub c_r: <IntegerCommitment<G> as Commitment>::Instance,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Message2<G: ConvertibleUnknownOrderGroup> {
     pub alpha1: <IntegerCommitment<G> as Commitment>::Instance,
     pub alpha2: <IntegerCommitment<G> as Commitment>::Instance,
@@ -43,7 +45,7 @@ pub struct Message2<G: ConvertibleUnknownOrderGroup> {
     pub alpha4: G::Elem,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Message3 {
     pub s_e: Integer,
     pub s_r: Integer,
@@ -53,7 +55,7 @@ pub struct Message3 {
     pub s_delta: Integer,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Proof<G: ConvertibleUnknownOrderGroup> {
     pub message1: Message1<G>,
     pub message2: Message2<G>,

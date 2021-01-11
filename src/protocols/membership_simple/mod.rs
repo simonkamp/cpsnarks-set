@@ -23,6 +23,7 @@ use rand::{CryptoRng, RngCore};
 use rug::rand::MutRandState;
 use rug::Integer;
 use curve25519_dalek::{ristretto::RistrettoPoint};
+use serde::{Serialize};
 
 
 pub mod channel;
@@ -67,17 +68,24 @@ pub struct Witness<G: ConvertibleUnknownOrderGroup> {
     pub w: G::Elem,
 }
 
+
+#[derive(Serialize)] 
 pub struct Proof<
-    G: ConvertibleUnknownOrderGroup,
+    G: ConvertibleUnknownOrderGroup, 
     P: CurvePointProjective,
 
-> {
+>
+where 
+    <IntegerCommitment<G> as Commitment>::Instance: Serialize,
+    RootProof<G>: Serialize,
+    ModEqProof<G, P>: Serialize,
+{
     pub c_e: <IntegerCommitment<G> as Commitment>::Instance,
     pub proof_root: RootProof<G>,
     pub proof_modeq: ModEqProof<G, P>,
 }
 
-impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> Clone
+impl<G: ConvertibleUnknownOrderGroup + Serialize , P: CurvePointProjective  + Serialize > Clone
     for Proof<G, P>
 {
     fn clone(&self) -> Self {
@@ -117,7 +125,7 @@ impl<G: ConvertibleUnknownOrderGroup>
     } 
 }
 
-impl<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective>
+impl<G: ConvertibleUnknownOrderGroup + Serialize , P: CurvePointProjective + Serialize >
     Protocol<G, P>
 {
     pub fn setup<R1: MutRandState, R2: RngCore + CryptoRng>(

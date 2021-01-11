@@ -2,6 +2,7 @@
 
 use rand::{CryptoRng, RngCore};
 use rug::Integer;
+use serde::Serialize;
 
 quick_error! {
     #[derive(Debug)]
@@ -30,7 +31,7 @@ pub trait CurvePointProjective
 where
     Self: Clone + PartialEq,
 {
-    type ScalarField: Field;
+    type ScalarField: Field + Serialize;
 
     fn mul(&self, s: &Self::ScalarField) -> Self;
     fn add(&self, other: &Self) -> Self;

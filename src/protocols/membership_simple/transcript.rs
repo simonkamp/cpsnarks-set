@@ -28,6 +28,8 @@ use merlin::Transcript;
 use rug::Integer;
 use std::cell::RefCell;
 
+use serde::{Serialize};
+
 pub trait TranscriptProtocolMembership<G: ConvertibleUnknownOrderGroup>:
     TranscriptProtocolInteger<G> + TranscriptProtocolChallenge
 {
@@ -41,8 +43,8 @@ impl<G: ConvertibleUnknownOrderGroup> TranscriptProtocolMembership<G> for Transc
 }
 pub struct TranscriptVerifierChannel<
     'a,
-    G: ConvertibleUnknownOrderGroup,
-    P: CurvePointProjective,
+    G: ConvertibleUnknownOrderGroup + Serialize ,
+    P: CurvePointProjective + Serialize ,
     
     T: TranscriptProtocolMembership<G>
         + TranscriptProtocolRoot<G>
@@ -57,8 +59,8 @@ pub struct TranscriptVerifierChannel<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
             + TranscriptProtocolModEq<G, P>,
@@ -99,8 +101,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -133,8 +135,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -164,8 +166,8 @@ impl<
 
 pub struct TranscriptProverChannel<
     'a,
-    G: ConvertibleUnknownOrderGroup,
-    P: CurvePointProjective,
+    G: ConvertibleUnknownOrderGroup + Serialize ,
+    P: CurvePointProjective + Serialize ,
     
     T: TranscriptProtocolMembership<G>
         + TranscriptProtocolRoot<G>
@@ -180,8 +182,8 @@ pub struct TranscriptProverChannel<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -206,8 +208,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -233,8 +235,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -256,8 +258,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>
@@ -277,8 +279,8 @@ impl<
 
 impl<
         'a,
-        G: ConvertibleUnknownOrderGroup,
-        P: CurvePointProjective,
+        G: ConvertibleUnknownOrderGroup + Serialize ,
+        P: CurvePointProjective + Serialize ,
         
         T: TranscriptProtocolMembership<G>
             + TranscriptProtocolRoot<G>

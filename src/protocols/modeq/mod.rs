@@ -13,6 +13,7 @@ use crate::{
 use channel::{ModEqProverChannel, ModEqVerifierChannel};
 use rand::{CryptoRng, RngCore};
 use rug::{rand::MutRandState, Integer};
+use serde::{Serialize};
 
 pub mod channel;
 pub mod transcript;
@@ -36,21 +37,22 @@ pub struct Witness {
     pub r_q: Integer,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Message1<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> {
     pub alpha1: <IntegerCommitment<G> as Commitment>::Instance,
     pub alpha2: <PedersenCommitment<P> as Commitment>::Instance,
 }
 
-#[derive(Clone)]
+#[derive(Clone, Serialize)]
 pub struct Message2<P: CurvePointProjective> {
     pub s_e: Integer,
     pub s_r: Integer,
     pub s_r_q: P::ScalarField,
 }
 
-#[derive(Clone)]
-pub struct Proof<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> {
+#[derive(Clone, Serialize)] 
+pub struct Proof<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> 
+{
     pub message1: Message1<G, P>,
     pub message2: Message2<P>,
 }

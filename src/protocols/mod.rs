@@ -7,7 +7,7 @@ use crate::{
 use ark_relations::r1cs::{SynthesisError};
 use rug::Integer;
 
-pub mod coprime;
+//pub mod coprime;
 //pub mod hash_to_prime;
 pub mod membership_simple;
 pub mod modeq;
