@@ -18,6 +18,7 @@ use crate::{
     utils::ConvertibleUnknownOrderGroup,
     utils::{curve::CurvePointProjective, random_between},
 };
+use accumulator::group::{Group};
 use channel::{MembershipProverChannel, MembershipVerifierChannel};
 use rand::{CryptoRng, RngCore};
 use rug::rand::MutRandState;
@@ -76,6 +77,7 @@ pub struct Proof<
 
 >
 where 
+    <G as Group>::Elem: Serialize,
     <IntegerCommitment<G> as Commitment>::Instance: Serialize,
     RootProof<G>: Serialize,
     ModEqProof<G, P>: Serialize,
