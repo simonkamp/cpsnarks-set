@@ -38,6 +38,9 @@ ark-relations = { git = "https://github.com/arkworks-rs/snark", default-features
 ark-poly-commit = { git = "https://github.com/arkworks-rs/poly-commit", default-features = false }
 bench-utils = { git = "https://github.com/arkworks-rs/utils", default-features = false }
 
+rug-binserial = { git = "https://github.com/matteocam/rug-binserial" }
+proofsize_derive = "0.1.0"
+
 [features]
 dalek = ["curve25519-dalek", "bulletproofs"]
 class = []

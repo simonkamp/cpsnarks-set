@@ -15,6 +15,8 @@ use rand::{CryptoRng, RngCore};
 use rug::{rand::MutRandState, Integer};
 use serde::{Serialize};
 
+use proofsize_derive::*;
+
 pub mod channel;
 pub mod transcript;
 
@@ -37,20 +39,20 @@ pub struct Witness {
     pub r_q: Integer,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Message1<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> {
     pub alpha1: <IntegerCommitment<G> as Commitment>::Instance,
     pub alpha2: <PedersenCommitment<P> as Commitment>::Instance,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Message2<P: CurvePointProjective> {
     pub s_e: Integer,
     pub s_r: Integer,
     pub s_r_q: P::ScalarField,
 }
 
-#[derive(Clone, Serialize)] 
+#[derive(Clone, Serialize, ProofSize)] 
 pub struct Proof<G: ConvertibleUnknownOrderGroup, P: CurvePointProjective> 
 {
     pub message1: Message1<G, P>,
@@ -218,6 +220,8 @@ mod test {
             .unwrap();
 
         let proof = verifier_channel.proof().unwrap();
+
+        let _sz = proof.proof_size();
 
         let verification_transcript = RefCell::new(Transcript::new(b"modeq"));
         let mut prover_channel =

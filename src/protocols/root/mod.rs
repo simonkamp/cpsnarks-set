@@ -10,6 +10,8 @@ use rug::rand::MutRandState;
 use rug::Integer;
 use serde::{Serialize};
 
+use proofsize_derive::*;
+
 
 pub mod channel;
 pub mod transcript;
@@ -31,13 +33,13 @@ pub struct Witness<G: ConvertibleUnknownOrderGroup> {
     pub w: G::Elem,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Message1<G: ConvertibleUnknownOrderGroup> {
     pub c_w: G::Elem,
     pub c_r: <IntegerCommitment<G> as Commitment>::Instance,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Message2<G: ConvertibleUnknownOrderGroup> {
     pub alpha1: <IntegerCommitment<G> as Commitment>::Instance,
     pub alpha2: <IntegerCommitment<G> as Commitment>::Instance,
@@ -45,7 +47,7 @@ pub struct Message2<G: ConvertibleUnknownOrderGroup> {
     pub alpha4: G::Elem,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Message3 {
     pub s_e: Integer,
     pub s_r: Integer,
@@ -55,7 +57,7 @@ pub struct Message3 {
     pub s_delta: Integer,
 }
 
-#[derive(Clone, Serialize)]
+#[derive(Clone, Serialize, ProofSize)]
 pub struct Proof<G: ConvertibleUnknownOrderGroup> {
     pub message1: Message1<G>,
     pub message2: Message2<G>,
@@ -316,6 +318,7 @@ mod test {
             .unwrap();
 
         let proof = verifier_channel.proof().unwrap();
+        let _sz = proof.proof_size();
         let verification_transcript = RefCell::new(Transcript::new(b"root"));
         let mut prover_channel =
             TranscriptProverChannel::new(&crs, &verification_transcript, &proof);
