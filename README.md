@@ -3,7 +3,7 @@ SNARKs for Set Membership over commitments
 
 **The library is not ready for production use!**
 
-This repo implements simplified RSA-based protocols used in the [Veksel](link) paper from the paper [Zero-Knowledge Proofs for Set Membership:
+This repo implements simplified RSA-based protocols used in the [Veksel](https://eprint.iacr.org/2021/327) paper from the paper [Zero-Knowledge Proofs for Set Membership:
 Efficient, Succinct, Modular](https://eprint.iacr.org/2019/1255.pdf).
 Most of the code is from this [repo](https://github.com/kobigurk/cpsnarks-set) by Kobi Gurkan. Important differences include: 
 - _it builds_: unfortunately Kobi's repo depends on the zexe library, now defunct; this repo is compatible with the refactoring of zexe from ark-works.
